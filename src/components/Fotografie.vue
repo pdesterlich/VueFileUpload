@@ -1,6 +1,7 @@
 <template>
 <div>
   <h1>elenco fotografie</h1>
+  <input type="file" v-on:change="postFotografia">
   <ul>
     <li v-for="item in elenco" v-on:click="currentId = item.id">{{ item.fileName }}</li>
   </ul>
@@ -32,6 +33,18 @@
             console.log('error')
             console.log(response)
           })
+      },
+      postFotografia (e) {
+        let files = e.target.files
+        let data = new FormData()
+        data.append('file', files[0])
+        this.$http.post('api/fotografie', data)
+          .then(response => {
+            e.target.value = ''
+            this.getList()
+          }, response => {
+            console.log('error')
+          })
       }
     },
     created () {
@@ -41,5 +54,7 @@
 </script>
 
 <style>
-
+ul > li {
+  cursor: pointer;
+}
 </style>
